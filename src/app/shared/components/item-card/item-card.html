@@ -1,13 +1,17 @@
-<div class="item-card">
+<div class="item-card" [ngClass]="{ 'premium': car.price > 50000 }">
   <div class="item-image">
-    <img
-      src="https://www.bentleymotors.com/content/dam/bm/websites/bmcom/bentleymotors-com/homepage/26my-azure/GT%20Azure%20Dynamic%20Desktop.jpg/_jcr_content/renditions/original.image_file.1286.643.file/GT%20Azure%20Dynamic%20Desktop.jpg"
-      alt="Car image" />
+    <img *ngIf="car.imageUrl; else placeholder" [src]="car.imageUrl" [alt]="car.brand + ' ' + car.model" />
+    <ng-template #placeholder>
+      <img src="assets/images/no-car-image.png" alt="No image" />
+    </ng-template>
   </div>
+
   <div class="item-details">
-    <h2>Car Brand Model</h2>
-    <p><strong>Year:</strong> 2025</p>
-    <p><strong>Color:</strong> Blue</p>
-    <p><strong>Price:</strong> $10000</p>
+    <h2>{{ car.brand }} {{ car.model }}</h2>
+    <p><strong>Year:</strong> {{ car.year }}</p>
+    <p><strong>Color:</strong> {{ car.color }}</p>
+    <p><strong>Price:</strong> ${{ car.price | number }}</p>
+
+    <span *ngIf="car.year >= 2022" class="badge new">NEW</span>
   </div>
 </div>
