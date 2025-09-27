@@ -1,15 +1,18 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Car } from '../../models/car.model';
 import { ItemCard } from '../item-card/item-card';
 
 @Component({
   selector: 'app-items-list',
-  imports: [CommonModule, ItemCard],
+  imports: [CommonModule, FormsModule, ItemCard],
   templateUrl: './items-list.html',
   styleUrl: './items-list.scss',
 })
 export class ItemsList {
+  searchQuery = '';
+
   cars: Car[] = [
     {
       id: 1,
@@ -56,4 +59,16 @@ export class ItemsList {
       price: 30000,
     },
   ];
+
+  onCarSelect(car: Car) {
+    console.log('Selected car:', car);
+  }
+
+  get filteredCars(): Car[] {
+    if (!this.searchQuery) return this.cars;
+    const q = this.searchQuery.toLowerCase();
+    return this.cars.filter(
+      (c) => c.brand.toLowerCase().includes(q) || c.model.toLowerCase().includes(q)
+    );
+  }
 }
