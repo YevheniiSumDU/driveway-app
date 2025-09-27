@@ -1,3 +1,17 @@
-<div class="items-list">
-  <app-item-card *ngFor="let car of cars" [car]="car" />
+<div class="search-container">
+  <input type="text" [(ngModel)]="searchQuery" placeholder="Search by brand or model" class="search-input" />
+</div>
+
+<div class="items-list-wrapper">
+  <ng-container *ngIf="filteredCars.length; else noResults">
+    <div class="items-list">
+      <app-item-card *ngFor="let car of filteredCars" [car]="car" (selectCar)="onCarSelect($event)" />
+    </div>
+  </ng-container>
+
+  <ng-template #noResults>
+    <div class="no-results-wrapper">
+      <p class="no-results">No cars found matching your search.</p>
+    </div>
+  </ng-template>
 </div>
