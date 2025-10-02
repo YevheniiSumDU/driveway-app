@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Car } from '../models/car.model';
 
 @Injectable({
@@ -42,17 +43,28 @@ export class DataService {
       price: 40000,
       imageUrl: 'assets/images/mercedes.png',
     },
-    {
-      id: 5,
-      brand: 'Mazda',
-      model: 'CX-5',
-      year: 2012,
-      color: 'Blue',
-      price: 30000,
-    },
+    { id: 5, brand: 'Mazda', model: 'CX-5', year: 2012, color: 'Blue', price: 30000 },
   ];
 
-  getItems(): Car[] {
-    return this.cars;
+  private carsSubject = new BehaviorSubject<Car[]>(this.cars);
+
+  getItems(): Observable<Car[]> {
+    return of(this.cars);
+  }
+
+  getItemsStream(): Observable<Car[]> {
+    return this.carsSubject.asObservable();
+  }
+
+  filterItems(query: string) {
+    if (!query) {
+      this.carsSubject.next(this.cars);
+      return;
+    }
+    const q = query.toLowerCase();
+    const filtered = this.cars.filter(
+      (c) => c.brand.toLowerCase().includes(q) || c.model.toLowerCase().includes(q)
+    );
+    this.carsSubject.next(filtered);
   }
 }
