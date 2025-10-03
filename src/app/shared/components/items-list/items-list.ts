@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { Car } from '../../models/car.model';
 import { DataService } from '../../services/data.service';
 import { ItemCard } from '../item-card/item-card';
@@ -11,25 +12,34 @@ import { ItemCard } from '../item-card/item-card';
   templateUrl: './items-list.html',
   styleUrl: './items-list.scss',
 })
-export class ItemsList implements OnInit {
+export class ItemsList implements OnInit, OnDestroy {
   searchQuery = '';
   cars: Car[] = [];
+  private subscription!: Subscription;
 
   constructor(private dataService: DataService) {}
 
   ngOnInit(): void {
-    this.cars = this.dataService.getItems();
+    this.subscription = this.dataService.getItemsStream().subscribe((cars) => {
+      this.cars = cars;
+    });
+
+    this.dataService.getItems().subscribe((cars) => {
+      this.cars = cars;
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   onCarSelect(car: Car) {
     console.log('Selected car:', car);
   }
 
-  get filteredCars(): Car[] {
-    if (!this.searchQuery) return this.cars;
-    const q = this.searchQuery.toLowerCase();
-    return this.cars.filter(
-      (c) => c.brand.toLowerCase().includes(q) || c.model.toLowerCase().includes(q)
-    );
+  onSearchChange() {
+    this.dataService.filterItems(this.searchQuery);
   }
 }
