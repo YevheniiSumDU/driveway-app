@@ -9,11 +9,27 @@
   color: #fff;
   padding: 16px 0;
 
-  .logo {
-    color: #fff;
-    font-size: 1.8rem;
-    font-weight: bold;
+  .logo-link {
+    text-decoration: none;
+    color: inherit;
     display: inline-block;
+    transition: all 0.3s ease;
+
+    &:hover {
+      .logo {
+        color: #3b82f6;
+        transform: scale(1.02);
+      }
+    }
+
+    .logo {
+      margin: 0;
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
   }
 }
 
@@ -30,13 +46,5 @@
 
   p {
     margin: 0;
-  }
-
-  .footer-links {
-    list-style: none;
-    display: flex;
-    gap: 16px;
-    padding: 0;
-    margin: 8px 0 0 0;
   }
 }

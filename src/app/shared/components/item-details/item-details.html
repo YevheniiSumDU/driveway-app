@@ -1,0 +1,243 @@
+<div class="item-details-page">
+  @if (car; as car) {
+  <!-- Back Button -->
+  <div class="back-button-container">
+    <button class="btn-back" (click)="goBack()">
+      ← Back to Cars
+    </button>
+  </div>
+
+  <div class="details-container">
+    <!-- Image Section with Carousel -->
+    <div class="image-section">
+      <div class="carousel-container">
+        <!-- Main Image Display -->
+        <div class="main-image">
+          <img [src]="currentImage" [alt]="car.brand + ' ' + car.model" (error)="handleImageError($event)" />
+          @if (car.year >= 2023) {
+          <span class="badge new-badge">NEW</span>
+          }
+
+          <!-- Carousel Controls -->
+          @if (car.gallery && car.gallery.length > 1) {
+          <button class="carousel-btn prev-btn" (click)="previousImage()" aria-label="Previous image">
+            <span>‹</span>
+          </button>
+          <button class="carousel-btn next-btn" (click)="nextImage()" aria-label="Next image">
+            <span>›</span>
+          </button>
+          }
+        </div>
+
+        <!-- Image Thumbnails with Navigation -->
+        @if (car.gallery && car.gallery.length > 1) {
+        <div class="carousel-thumbnails-container">
+          <button class="thumbnail-nav-btn thumbnail-prev-btn" (click)="showThumbnailNavLeft && previousThumbnails()"
+            [class.disabled]="!showThumbnailNavLeft" [attr.aria-disabled]="!showThumbnailNavLeft"
+            [disabled]="!showThumbnailNavLeft" aria-label="Previous thumbnails">
+            ‹
+          </button>
+
+          <div class="carousel-thumbnails">
+            @for (image of visibleThumbnails; track image; let i = $index) {
+            <div class="thumbnail" [class.active]="currentImage === image"
+              (click)="selectImage(thumbnailStartIndex + i)">
+              <img [src]="image" [alt]="'Thumbnail ' + (thumbnailStartIndex + i + 1)" />
+            </div>
+            }
+          </div>
+
+          <button class="thumbnail-nav-btn thumbnail-next-btn" (click)="showThumbnailNavRight && nextThumbnails()"
+            [class.disabled]="!showThumbnailNavRight" [attr.aria-disabled]="!showThumbnailNavRight"
+            [disabled]="!showThumbnailNavRight" aria-label="Next thumbnails">
+            ›
+          </button>
+        </div>
+        }
+
+        <!-- Image Counter -->
+        @if (car.gallery && car.gallery.length > 1) {
+        <div class="image-counter">
+          {{ currentImageIndex + 1 }} / {{ car.gallery.length }}
+        </div>
+        }
+      </div>
+    </div>
+
+    <div class="info-section">
+      <div class="header">
+        <div class="title-section">
+          <h1>{{ car.brand }} {{ car.model }}</h1>
+          <div class="price-section">
+            <span class="current-price">${{ car.price | number }}</span>
+          </div>
+        </div>
+        <button class="btn-share" (click)="shareCar()" title="Share this car">
+          <span class="share-icon">↪</span>
+          Share
+        </button>
+      </div>
+
+      <!-- Key Specifications -->
+      <div class="key-specs">
+        <div class="spec-item">
+          <span class="spec-icon">📅</span>
+          <span class="spec-value">{{ car.year }}</span>
+          <span class="spec-label">Year</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-icon">🎨</span>
+          <span class="spec-value">{{ car.color }}</span>
+          <span class="spec-label">Color</span>
+        </div>
+        @if (car.mileage) {
+        <div class="spec-item">
+          <span class="spec-icon">🛣️</span>
+          <span class="spec-value">{{ car.mileage | number }} km</span>
+          <span class="spec-label">Mileage</span>
+        </div>
+        }
+        @if (car.fuelType) {
+        <div class="spec-item">
+          <span class="spec-icon">⛽</span>
+          <span class="spec-value">{{ car.fuelType }}</span>
+          <span class="spec-label">Fuel</span>
+        </div>
+        }
+      </div>
+
+      <!-- Detailed Specifications -->
+      <div class="specs-grid">
+        <h3>Technical Specifications</h3>
+        <div class="specs-container">
+          @if (car.engine || car.transmission || car.drivetrain) {
+          <div class="spec-group">
+            <h4>Performance</h4>
+            @if (car.engine) {
+            <div class="spec-row">
+              <span class="spec-name">Engine</span>
+              <span class="spec-value">{{ car.engine }}</span>
+            </div>
+            }
+            @if (car.transmission) {
+            <div class="spec-row">
+              <span class="spec-name">Transmission</span>
+              <span class="spec-value">{{ car.transmission }}</span>
+            </div>
+            }
+            @if (car.drivetrain) {
+            <div class="spec-row">
+              <span class="spec-name">Drivetrain</span>
+              <span class="spec-value">{{ car.drivetrain }}</span>
+            </div>
+            }
+          </div>
+          }
+
+          @if (car.bodyType || car.doors || car.seats) {
+          <div class="spec-group">
+            <h4>Dimensions</h4>
+            @if (car.bodyType) {
+            <div class="spec-row">
+              <span class="spec-name">Body Type</span>
+              <span class="spec-value">{{ car.bodyType }}</span>
+            </div>
+            }
+            @if (car.doors) {
+            <div class="spec-row">
+              <span class="spec-name">Doors</span>
+              <span class="spec-value">{{ car.doors }}</span>
+            </div>
+            }
+            @if (car.seats) {
+            <div class="spec-row">
+              <span class="spec-name">Seats</span>
+              <span class="spec-value">{{ car.seats }}</span>
+            </div>
+            }
+          </div>
+          }
+
+          @if (car.fuelConsumption || car.co2Emission) {
+          <div class="spec-group">
+            <h4>Efficiency</h4>
+            @if (car.fuelConsumption) {
+            <div class="spec-row">
+              <span class="spec-name">Fuel Consumption</span>
+              <span class="spec-value">{{ car.fuelConsumption }} L/100km</span>
+            </div>
+            }
+            @if (car.co2Emission) {
+            <div class="spec-row">
+              <span class="spec-name">CO₂ Emissions</span>
+              <span class="spec-value">{{ car.co2Emission }} g/km</span>
+            </div>
+            }
+          </div>
+          }
+        </div>
+      </div>
+
+      <!-- Features & Equipment -->
+      @if (car.features && car.features.length > 0) {
+      <div class="features-section">
+        <h3>Features & Equipment</h3>
+        <div class="features-grid">
+          @for (feature of car.features; track feature) {
+          <div class="feature-item">
+            <span class="feature-icon">✓</span>
+            {{ feature }}
+          </div>
+          }
+        </div>
+      </div>
+      }
+
+      <!-- Color Options -->
+      @if (car.colorOptions && car.colorOptions.length > 0) {
+      <div class="color-options-section">
+        <h3>Available Colors</h3>
+        <div class="colors-grid">
+          @for (color of car.colorOptions; track color) {
+          <div class="color-item">
+            <span class="color-swatch" [style.background]="getColorValue(color)"></span>
+            <span class="color-name">{{ color }}</span>
+          </div>
+          }
+        </div>
+      </div>
+      }
+
+      <!-- Description -->
+      @if (car.description) {
+      <div class="description-section">
+        <h3>Description</h3>
+        <p class="description-text">{{ car.description }}</p>
+      </div>
+      }
+
+      <!-- Warranty Information -->
+      @if (car.warranty) {
+      <div class="warranty-section">
+        <h3>Warranty & Support</h3>
+        <div class="warranty-card">
+          <span class="warranty-icon">🛡️</span>
+          <div class="warranty-details">
+            <strong>{{ car.warranty }}</strong>
+            <p>Comprehensive warranty coverage included</p>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </div>
+  } @else {
+  <div class="not-found">
+    <div class="not-found-content">
+      <h2>Car Not Found</h2>
+      <p>Sorry, the car you're looking for doesn't exist or has been removed.</p>
+      <button class="btn-primary" routerLink="/cars">Browse All Cars</button>
+    </div>
+  </div>
+  }
+</div>
