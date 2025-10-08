@@ -1,4 +1,4 @@
-<div class="item-card" [ngClass]="{ 'premium': car.price > 50000 }">
+<div class="item-card" [ngClass]="{ 'premium': car.price > 50000 }" appHoverEffect>
   <div class="item-image">
     @if (car.imageUrl) {
     <img [src]="car.imageUrl" [alt]="car.brand + ' ' + car.model" />
@@ -15,9 +15,15 @@
       }
     </div>
 
-    <p><strong>Year:</strong> {{ car.year }}</p>
+    <p><strong>Year:</strong> {{ car.year | carProperty:'year' }}</p>
     <p><strong>Color:</strong> {{ car.color }}</p>
-    <p><strong>Price:</strong> ${{ car.price | number }}</p>
+    <p><strong>Price:</strong> {{ car.price | carProperty:'price' }}</p>
+
+    @if (car.description) {
+    <p class="description-preview">
+      {{ car.description | carProperty:'description':100 }}
+    </p>
+    }
 
     <div class="btn-container">
       <a [routerLink]="['/items', car.id]" class="btn-details">View Details</a>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
+import { CarPropertyPipe } from '../../pipes/car-property.pipe';
 import { ActivatedRoute } from '@angular/router';
 import { Car } from '../../models/car.model';
 import { DataService } from '../../services/data.service';
@@ -8,7 +9,7 @@ import { DataService } from '../../services/data.service';
 @Component({
   selector: 'app-item-details',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, CarPropertyPipe],
   templateUrl: './item-details.html',
   styleUrl: './item-details.scss',
 })
