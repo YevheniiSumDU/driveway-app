@@ -4,15 +4,15 @@
 </div>
 
 <div class="items-list-wrapper">
-  <ng-container *ngIf="cars.length; else noResults">
-    <div class="items-list">
-      <app-item-card *ngFor="let car of cars" [car]="car" (selectCar)="onCarSelect($event)" />
-    </div>
-  </ng-container>
-
-  <ng-template #noResults>
-    <div class="no-results-wrapper">
-      <p class="no-results">No cars found matching your search.</p>
-    </div>
-  </ng-template>
+  @if (cars.length > 0) {
+  <div class="items-list">
+    @for (car of cars; track car) {
+    <app-item-card [car]="car" />
+    }
+  </div>
+  } @else {
+  <div class="no-results-wrapper">
+    <p class="no-results">No cars found matching your search.</p>
+  </div>
+  }
 </div>

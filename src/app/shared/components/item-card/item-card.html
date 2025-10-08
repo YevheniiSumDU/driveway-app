@@ -1,15 +1,18 @@
 <div class="item-card" [ngClass]="{ 'premium': car.price > 50000 }">
   <div class="item-image">
-    <img *ngIf="car.imageUrl; else placeholder" [src]="car.imageUrl" [alt]="car.brand + ' ' + car.model" />
-    <ng-template #placeholder>
-      <img src="assets/images/no-car-image.png" alt="No image" />
-    </ng-template>
+    @if (car.imageUrl) {
+    <img [src]="car.imageUrl" [alt]="car.brand + ' ' + car.model" />
+    } @else {
+    <img src="assets/images/no-car-image.png" alt="No image" />
+    }
   </div>
 
   <div class="item-details">
     <div class="header-container">
       <h2>{{ car.brand }} {{ car.model }}</h2>
-      <div *ngIf="car.year >= 2022" class="badge new">NEW</div>
+      @if (car.year >= 2022) {
+      <div class="badge new-badge">NEW</div>
+      }
     </div>
 
     <p><strong>Year:</strong> {{ car.year }}</p>
@@ -17,7 +20,7 @@
     <p><strong>Price:</strong> ${{ car.price | number }}</p>
 
     <div class="btn-container">
-      <button type="button" class="btn-details" (click)="onSelect()">More details</button>
+      <a [routerLink]="['/items', car.id]" class="btn-details">View Details</a>
     </div>
   </div>
 </div>

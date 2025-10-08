@@ -1,14 +1,15 @@
 <header class="header">
   <div class="container">
-    <h1 class="logo">{{ appName }}</h1>
+    <a routerLink="/" class="logo-link">
+      <h1 class="logo">{{ appName }}</h1>
+    </a>
   </div>
 </header>
 
 <main class="main">
   <div class="container">
-    <app-items-list />
+    <router-outlet />
   </div>
-  <router-outlet />
 </main>
 
 <footer class="footer">
