@@ -223,6 +223,24 @@ export class DataService {
     return of(car);
   }
 
+  addCar(car: Car): Observable<Car> {
+    const newId = Math.max(...this.cars.map((c) => c.id)) + 1;
+    const newCar = { ...car, id: newId };
+    this.cars.push(newCar);
+    this.carsSubject.next([...this.cars]);
+    return of(newCar);
+  }
+
+  updateCar(updatedCar: Car): Observable<Car> {
+    const index = this.cars.findIndex((c) => c.id === updatedCar.id);
+    if (index !== -1) {
+      this.cars[index] = updatedCar;
+      this.carsSubject.next([...this.cars]);
+      return of(updatedCar);
+    }
+    throw new Error('Car not found');
+  }
+
   filterItems(query: string) {
     if (!query) {
       this.carsSubject.next(this.cars);

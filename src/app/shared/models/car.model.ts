@@ -21,4 +21,7 @@ export interface Car {
   fuelConsumption?: number;
   co2Emission?: number;
   warranty?: string;
+  isNew?: boolean;
+  horsepower?: number;
+  acceleration?: number;
 }
