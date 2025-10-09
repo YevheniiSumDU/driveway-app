@@ -69,7 +69,7 @@
         <div class="title-section">
           <h1>{{ car.brand }} {{ car.model }}</h1>
           <div class="price-section">
-            <span class="current-price">${{ car.price | number }}</span>
+            <span class="current-price">{{ car.price | carProperty:'price' }}</span>
           </div>
         </div>
         <button class="btn-share" (click)="shareCar()" title="Share this car">
@@ -93,7 +93,7 @@
         @if (car.mileage) {
         <div class="spec-item">
           <span class="spec-icon">🛣️</span>
-          <span class="spec-value">{{ car.mileage | number }} km</span>
+          <span class="spec-value">{{ car.mileage | carProperty:'mileage' }}</span>
           <span class="spec-label">Mileage</span>
         </div>
         }
@@ -116,7 +116,7 @@
             @if (car.engine) {
             <div class="spec-row">
               <span class="spec-name">Engine</span>
-              <span class="spec-value">{{ car.engine }}</span>
+              <span class="spec-value">{{ car.engine | carProperty:'engine' }}</span>
             </div>
             }
             @if (car.transmission) {
@@ -164,7 +164,7 @@
             @if (car.fuelConsumption) {
             <div class="spec-row">
               <span class="spec-name">Fuel Consumption</span>
-              <span class="spec-value">{{ car.fuelConsumption }} L/100km</span>
+              <span class="spec-value">{{ car.fuelConsumption | carProperty:'fuelConsumption' }}</span>
             </div>
             }
             @if (car.co2Emission) {
@@ -223,7 +223,7 @@
         <div class="warranty-card">
           <span class="warranty-icon">🛡️</span>
           <div class="warranty-details">
-            <strong>{{ car.warranty }}</strong>
+            <strong>{{ car.warranty | carProperty:'warranty' }}</strong>
             <p>Comprehensive warranty coverage included</p>
           </div>
         </div>

@@ -7,17 +7,25 @@
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  &:hover {
-    cursor: pointer;
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-  }
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
 
   &.premium {
     border: 2px solid gold;
     box-shadow: 0 4px 12px rgba(255, 215, 0, 0.4);
+
+    &.card-hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 12px 28px rgba(255, 215, 0, 0.6);
+      z-index: 10;
+    }
+  }
+
+  &.card-hover:not(.premium) {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(59, 130, 246, 0.3);
+    z-index: 10;
   }
 
   .item-image {
@@ -49,7 +57,7 @@
     .header-container {
       display: flex;
       justify-content: space-between;
-      justify-items: center;
+      align-items: center;
       margin-bottom: 8px;
 
       h2 {
@@ -87,10 +95,21 @@
       }
     }
 
+    .description-preview {
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.4;
+      margin: 8px 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
     .btn-container {
       display: flex;
-      justify-content: right;
-      justify-items: center;
+      justify-content: flex-end;
+      align-items: center;
 
       .btn-details {
         margin-top: 10px;
@@ -103,6 +122,8 @@
         border-radius: 8px;
         text-align: center;
         transition: background 0.2s ease, transform 0.2s ease;
+        text-decoration: none;
+        display: inline-block;
 
         &:hover {
           background: #0056b3;

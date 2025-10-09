@@ -4,6 +4,7 @@
 </div>
 
 <div class="items-list-wrapper">
+  @if (cars$ | async; as cars) {
   @if (cars.length > 0) {
   <div class="items-list">
     @for (car of cars; track car) {
@@ -12,7 +13,16 @@
   </div>
   } @else {
   <div class="no-results-wrapper">
-    <p class="no-results">No cars found matching your search.</p>
+    <div class="no-results-content">
+      <p class="no-results">No cars found</p>
+      <p class="no-results-hint">Try adjusting your search terms</p>
+    </div>
+  </div>
+  }
+  } @else {
+  <div class="loading-wrapper">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Loading cars...</p>
   </div>
   }
 </div>
