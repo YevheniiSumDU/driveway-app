@@ -1,0 +1,306 @@
+<div class="form-page">
+  <!-- Back Button -->
+  <div class="back-button-container">
+    <button class="btn-back" (click)="onCancel()">
+      ← Back to Cars
+    </button>
+  </div>
+
+  <div class="form-container">
+    <h1 class="form-title">{{ isEditMode ? 'Edit Car' : 'Add New Car' }}</h1>
+
+    <form [formGroup]="carForm" (ngSubmit)="onSubmit()" class="car-form">
+
+      <!-- Basic Information Section -->
+      <div class="form-section">
+        <h2 class="section-title">Basic Information</h2>
+        <div class="form-grid">
+          <!-- Brand -->
+          <div class="form-group">
+            <label for="brand" class="form-label">Brand *</label>
+            <select id="brand" formControlName="brand" class="form-select" [class.invalid]="isFieldInvalid('brand')">
+              <option value="">Select Brand</option>
+              <option *ngFor="let brand of brands" [value]="brand">{{ brand }}</option>
+            </select>
+            @if (isFieldInvalid('brand')) {
+            <span class="error-message">{{ getFieldError('brand') }}</span>
+            }
+          </div>
+
+          <!-- Model -->
+          <div class="form-group">
+            <label for="model" class="form-label">Model *</label>
+            <input id="model" type="text" formControlName="model" class="form-input"
+              [class.invalid]="isFieldInvalid('model')" placeholder="e.g., Corolla, X5">
+            @if (isFieldInvalid('model')) {
+            <span class="error-message">{{ getFieldError('model') }}</span>
+            }
+          </div>
+
+          <!-- Year -->
+          <div class="form-group">
+            <label for="year" class="form-label">Year *</label>
+            <input id="year" type="number" formControlName="year" class="form-input"
+              [class.invalid]="isFieldInvalid('year')" [min]="1990" [max]="currentYear + 1">
+            @if (isFieldInvalid('year')) {
+            <span class="error-message">{{ getFieldError('year') }}</span>
+            }
+          </div>
+
+          <!-- Color -->
+          <div class="form-group">
+            <label for="color" class="form-label">Color *</label>
+            <select id="color" formControlName="color" class="form-select" [class.invalid]="isFieldInvalid('color')">
+              <option value="">Select Color</option>
+              <option *ngFor="let color of colors" [value]="color">{{ color }}</option>
+            </select>
+            @if (isFieldInvalid('color')) {
+            <span class="error-message">{{ getFieldError('color') }}</span>
+            }
+          </div>
+
+          <!-- Price -->
+          <div class="form-group">
+            <label for="price" class="form-label">Price ($) *</label>
+            <input id="price" type="number" formControlName="price" class="form-input"
+              [class.invalid]="isFieldInvalid('price')" placeholder="e.g., 20000">
+            @if (isFieldInvalid('price')) {
+            <span class="error-message">{{ getFieldError('price') }}</span>
+            }
+          </div>
+
+          <!-- Is New -->
+          <div class="form-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="isNew" class="checkbox-input">
+              <span class="checkbox-custom"></span>
+              Mark as New Vehicle
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Technical Specifications Section -->
+      <div class="form-section">
+        <h2 class="section-title">Technical Specifications</h2>
+        <div class="form-grid">
+          <!-- Fuel Type -->
+          <div class="form-group">
+            <label for="fuelType" class="form-label">Fuel Type</label>
+            <select id="fuelType" formControlName="fuelType" class="form-select">
+              <option value="">Select Fuel Type</option>
+              <option *ngFor="let type of fuelTypes" [value]="type">{{ type }}</option>
+            </select>
+          </div>
+
+          <!-- Transmission -->
+          <div class="form-group">
+            <label for="transmission" class="form-label">Transmission</label>
+            <select id="transmission" formControlName="transmission" class="form-select">
+              <option value="">Select Transmission</option>
+              <option *ngFor="let trans of transmissions" [value]="trans">{{ trans }}</option>
+            </select>
+          </div>
+
+          <!-- Body Type -->
+          <div class="form-group">
+            <label for="bodyType" class="form-label">Body Type</label>
+            <select id="bodyType" formControlName="bodyType" class="form-select">
+              <option value="">Select Body Type</option>
+              <option *ngFor="let body of bodyTypes" [value]="body">{{ body }}</option>
+            </select>
+          </div>
+
+          <!-- Drivetrain -->
+          <div class="form-group">
+            <label for="drivetrain" class="form-label">Drivetrain</label>
+            <select id="drivetrain" formControlName="drivetrain" class="form-select">
+              <option value="">Select Drivetrain</option>
+              <option *ngFor="let drive of drivetrains" [value]="drive">{{ drive }}</option>
+            </select>
+          </div>
+
+          <!-- Mileage -->
+          <div class="form-group">
+            <label for="mileage" class="form-label">Mileage (km)</label>
+            <input id="mileage" type="number" formControlName="mileage" class="form-input"
+              [class.invalid]="isFieldInvalid('mileage')" placeholder="e.g., 15000">
+            @if (isFieldInvalid('mileage')) {
+            <span class="error-message">{{ getFieldError('mileage') }}</span>
+            }
+          </div>
+
+          <!-- Engine -->
+          <div class="form-group">
+            <label for="engine" class="form-label">Engine</label>
+            <input id="engine" type="text" formControlName="engine" class="form-input"
+              placeholder="e.g., 1.8L 4-cylinder">
+          </div>
+
+          <!-- Horsepower -->
+          <div class="form-group">
+            <label for="horsepower" class="form-label">Horsepower</label>
+            <input id="horsepower" type="number" formControlName="horsepower" class="form-input"
+              [class.invalid]="isFieldInvalid('horsepower')" placeholder="e.g., 150">
+            @if (isFieldInvalid('horsepower')) {
+            <span class="error-message">{{ getFieldError('horsepower') }}</span>
+            }
+          </div>
+
+          <!-- Acceleration -->
+          <div class="form-group">
+            <label for="acceleration" class="form-label">0-100 km/h (seconds)</label>
+            <input id="acceleration" type="number" step="0.1" formControlName="acceleration" class="form-input"
+              [class.invalid]="isFieldInvalid('acceleration')" placeholder="e.g., 8.5">
+            @if (isFieldInvalid('acceleration')) {
+            <span class="error-message">{{ getFieldError('acceleration') }}</span>
+            }
+          </div>
+
+          <!-- Doors -->
+          <div class="form-group">
+            <label for="doors" class="form-label">Doors</label>
+            <input id="doors" type="number" formControlName="doors" class="form-input"
+              [class.invalid]="isFieldInvalid('doors')" placeholder="e.g., 4">
+            @if (isFieldInvalid('doors')) {
+            <span class="error-message">{{ getFieldError('doors') }}</span>
+            }
+          </div>
+
+          <!-- Seats -->
+          <div class="form-group">
+            <label for="seats" class="form-label">Seats</label>
+            <input id="seats" type="number" formControlName="seats" class="form-input"
+              [class.invalid]="isFieldInvalid('seats')" placeholder="e.g., 5">
+            @if (isFieldInvalid('seats')) {
+            <span class="error-message">{{ getFieldError('seats') }}</span>
+            }
+          </div>
+
+          <!-- Fuel Consumption -->
+          <div class="form-group">
+            <label for="fuelConsumption" class="form-label">Fuel Consumption (L/100km)</label>
+            <input id="fuelConsumption" type="number" step="0.1" formControlName="fuelConsumption" class="form-input"
+              [class.invalid]="isFieldInvalid('fuelConsumption')" placeholder="e.g., 6.5">
+            @if (isFieldInvalid('fuelConsumption')) {
+            <span class="error-message">{{ getFieldError('fuelConsumption') }}</span>
+            }
+          </div>
+
+          <!-- CO2 Emissions -->
+          <div class="form-group">
+            <label for="co2Emission" class="form-label">CO₂ Emissions (g/km)</label>
+            <input id="co2Emission" type="number" formControlName="co2Emission" class="form-input"
+              [class.invalid]="isFieldInvalid('co2Emission')" placeholder="e.g., 150">
+            @if (isFieldInvalid('co2Emission')) {
+            <span class="error-message">{{ getFieldError('co2Emission') }}</span>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Additional Information Section -->
+      <div class="form-section">
+        <h2 class="section-title">Additional Information</h2>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label for="description" class="form-label">Description</label>
+          <textarea id="description" formControlName="description" class="form-textarea" rows="4"
+            placeholder="Enter car description..."></textarea>
+        </div>
+
+        <!-- Warranty -->
+        <div class="form-group">
+          <label for="warranty" class="form-label">Warranty</label>
+          <input id="warranty" type="text" formControlName="warranty" class="form-input"
+            placeholder="e.g., 3 years / 60,000 km">
+        </div>
+
+        <!-- Main Image URL -->
+        <div class="form-group">
+          <label for="imageUrl" class="form-label">Main Image URL</label>
+          <input id="imageUrl" type="url" formControlName="imageUrl" class="form-input"
+            [class.invalid]="isFieldInvalid('imageUrl')" placeholder="https://example.com/car-image.jpg">
+          @if (isFieldInvalid('imageUrl')) {
+          <span class="error-message">{{ getFieldError('imageUrl') }}</span>
+          }
+        </div>
+      </div>
+
+      <!-- Dynamic Arrays Section -->
+      <div class="form-section">
+        <h2 class="section-title">Features & Options</h2>
+
+        <!-- Features -->
+        <div class="array-section">
+          <div class="array-header">
+            <h3 class="array-title">Features</h3>
+            <button type="button" class="btn-add" (click)="addFeature()">+ Add Feature</button>
+          </div>
+          <div formArrayName="features" class="array-items">
+            @for (feature of features.controls; track $index; let i = $index) {
+            <div class="array-item">
+              <input type="text" [formControlName]="i" class="form-input array-input"
+                [class.invalid]="isArrayItemInvalid('features', i)"
+                placeholder="Enter feature (e.g., Sunroof, Navigation)">
+              <button type="button" class="btn-remove" (click)="removeFeature(i)">×</button>
+              @if (isArrayItemInvalid('features', i)) {
+              <span class="error-message">{{ getArrayItemError('features', i) }}</span>
+              }
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- Color Options -->
+        <div class="array-section">
+          <div class="array-header">
+            <h3 class="array-title">Available Colors</h3>
+            <button type="button" class="btn-add" (click)="addColorOption()">+ Add Color</button>
+          </div>
+          <div formArrayName="colorOptions" class="array-items">
+            @for (color of colorOptions.controls; track $index; let i = $index) {
+            <div class="array-item">
+              <input type="text" [formControlName]="i" class="form-input array-input"
+                [class.invalid]="isArrayItemInvalid('colorOptions', i)" placeholder="Enter color name">
+              <button type="button" class="btn-remove" (click)="removeColorOption(i)">×</button>
+              @if (isArrayItemInvalid('colorOptions', i)) {
+              <span class="error-message">{{ getArrayItemError('colorOptions', i) }}</span>
+              }
+            </div>
+            }
+          </div>
+        </div>
+
+        <!-- Gallery Images -->
+        <div class="array-section">
+          <div class="array-header">
+            <h3 class="array-title">Gallery Images</h3>
+            <button type="button" class="btn-add" (click)="addGalleryImage()">+ Add Image URL</button>
+          </div>
+          <div formArrayName="gallery" class="array-items">
+            @for (image of gallery.controls; track $index; let i = $index) {
+            <div class="array-item">
+              <input type="url" [formControlName]="i" class="form-input array-input"
+                [class.invalid]="isArrayItemInvalid('gallery', i)" placeholder="https://example.com/gallery-image.jpg">
+              <button type="button" class="btn-remove" (click)="removeGalleryImage(i)">×</button>
+              @if (isArrayItemInvalid('gallery', i)) {
+              <span class="error-message">{{ getArrayItemError('gallery', i) }}</span>
+              }
+            </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button type="button" class="btn-secondary" (click)="onCancel()">Cancel</button>
+        <button type="submit" class="btn-primary" [disabled]="carForm.invalid">
+          {{ isEditMode ? 'Update Car' : 'Add Car' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,7 +1,13 @@
-<div class="search-container">
-  <input id="search" type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()"
-    placeholder="Search by brand or model" class="search-input" />
+<div class="header-actions">
+  <div class="search-container">
+    <input id="search" type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()"
+      placeholder="Search by brand or model" class="search-input" />
+  </div>
+  <div class="btn-container">
+    <a routerLink="/items/new" class="btn-add-car">+ Add New Car</a>
+  </div>
 </div>
+
 
 <div class="items-list-wrapper">
   @if (cars$ | async; as cars) {
