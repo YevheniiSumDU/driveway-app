@@ -8,9 +8,22 @@
   </div>
 </div>
 
-
 <div class="items-list-wrapper">
-  @if (cars$ | async; as cars) {
+  @if (isLoading) {
+  <div class="loading-wrapper">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Loading cars...</p>
+  </div>
+  }
+
+  @else if (error) {
+  <div class="error-wrapper">
+    <p class="error-text">Error: {{ error }}</p>
+    <button (click)="retryLoading()" class="retry-button">Try Again</button>
+  </div>
+  }
+
+  @else if (cars$ | async; as cars) {
   @if (cars.length > 0) {
   <div class="items-list">
     @for (car of cars; track car) {
@@ -25,10 +38,5 @@
     </div>
   </div>
   }
-  } @else {
-  <div class="loading-wrapper">
-    <div class="loading-spinner"></div>
-    <p class="loading-text">Loading cars...</p>
-  </div>
   }
 </div>
