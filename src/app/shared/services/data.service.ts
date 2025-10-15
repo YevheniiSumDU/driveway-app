@@ -1,253 +1,108 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { BehaviorSubject, Observable, throwError, shareReplay } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { Car } from '../models/car.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DataService {
-  private cars: Car[] = [
-    {
-      id: 1,
-      brand: 'Toyota',
-      model: 'Corolla',
-      year: 2022,
-      color: 'White',
-      price: 20000,
-      imageUrl: 'assets/images/toyota-corolla-1.png',
-      gallery: [
-        'assets/images/toyota-corolla-1.png',
-        'assets/images/toyota-corolla-2.jpg',
-        'assets/images/toyota-corolla-3.jpg',
-        'assets/images/toyota-corolla-4.jpg',
-      ],
-      mileage: 15000,
-      fuelType: 'Petrol',
-      transmission: 'Automatic',
-      engine: '1.8L 4-cylinder',
-      description:
-        'The Toyota Corolla delivers exceptional reliability and outstanding fuel efficiency in a modern, comfortable package. Perfect for daily commuting and family use, this sedan combines practical design with contemporary technology features.',
-      features: [
-        'Automatic Climate Control',
-        'Dual Front Airbags',
-        'Anti-lock Braking System (ABS)',
-        'Bluetooth Connectivity',
-        'Adaptive Cruise Control',
-        'High-Resolution Backup Camera',
-        'Touchscreen Infotainment',
-        'LED Daytime Running Lights',
-      ],
-      bodyType: 'Sedan',
-      doors: 4,
-      seats: 5,
-      drivetrain: 'FWD',
-      colorOptions: ['Crystal White', 'Midnight Black', 'Metallic Silver', 'Electric Blue'],
-      fuelConsumption: 6.5,
-      co2Emission: 150,
-      warranty: '3 years / 60,000 km comprehensive warranty',
-    },
-    {
-      id: 2,
-      brand: 'BMW',
-      model: 'X5',
-      year: 2023,
-      color: 'Black',
-      price: 55000,
-      imageUrl: 'assets/images/bmw-x5-1.png',
-      gallery: [
-        'assets/images/bmw-x5-1.png',
-        'assets/images/bmw-x5-2.jpg',
-        'assets/images/bmw-x5-3.jpg',
-        'assets/images/bmw-x5-4.jpg',
-        'assets/images/bmw-x5-5.jpg',
-        'assets/images/bmw-x5-6.jpg',
-      ],
-      mileage: 5000,
-      fuelType: 'Diesel',
-      transmission: '8-Speed Automatic',
-      engine: '3.0L TwinPower Turbo 6-cylinder',
-      description:
-        'The BMW X5 represents the pinnacle of luxury SUV engineering, offering powerful performance, cutting-edge technology, and uncompromising comfort. Experience superior handling and premium craftsmanship in every detail.',
-      features: [
-        'Nappa Leather Seats',
-        'Professional Navigation System',
-        'Adaptive Cruise Control with Stop & Go',
-        'Panoramic Glass Sunroof',
-        'Heated and Ventilated Front Seats',
-        '360-Degree Parking Assist',
-        'Harman Kardon Surround Sound',
-        'Gesture Control System',
-        'Wireless Charging',
-        'Head-Up Display',
-      ],
-      bodyType: 'SUV',
-      doors: 5,
-      seats: 5,
-      drivetrain: 'AWD',
-      colorOptions: ['Jet Black', 'Alpine White', 'Mineral Gray'],
-      fuelConsumption: 8.7,
-      co2Emission: 210,
-      warranty: '4 years / 80,000 km premium warranty with roadside assistance',
-    },
-    {
-      id: 3,
-      brand: 'Tesla',
-      model: 'Model 3',
-      year: 2021,
-      color: 'Red',
-      price: 45000,
-      imageUrl: 'assets/images/tesla-model3-1.png',
-      gallery: [
-        'assets/images/tesla-model3-1.png',
-        'assets/images/tesla-model3-2.jpg',
-        'assets/images/tesla-model3-3.jpg',
-        'assets/images/tesla-model3-4.jpg',
-      ],
-      mileage: 12000,
-      fuelType: 'Electric',
-      transmission: 'Single-Speed Automatic',
-      engine: 'Electric Motor (283 horsepower)',
-      description:
-        'The Tesla Model 3 redefines electric mobility with instant acceleration, advanced autopilot capabilities, and a minimalist interior focused on driver experience. Enjoy zero emissions without compromising performance or technology.',
-      features: [
-        'Enhanced Autopilot System',
-        '15-inch Central Touchscreen Display',
-        'Supercharging Capability',
-        'Premium Audio System',
-        'Keyless Phone Entry',
-        'Over-the-Air Updates',
-        'Glass Roof',
-        'Sentry Mode Security',
-        'Dog Mode Climate Control',
-        'Custom Driver Profiles',
-      ],
-      bodyType: 'Sedan',
-      doors: 4,
-      seats: 5,
-      drivetrain: 'RWD',
-      colorOptions: ['Red Multi-Coat', 'Pearl White', 'Solid Black', 'Deep Blue Metallic'],
-      fuelConsumption: 0,
-      co2Emission: 0,
-      warranty: '4 years / 80,000 km vehicle warranty, 8-year battery warranty',
-    },
-    {
-      id: 4,
-      brand: 'Mercedes-Benz',
-      model: 'C-Class',
-      year: 2020,
-      color: 'Silver',
-      price: 40000,
-      imageUrl: 'assets/images/mercedes-cclass-1.png',
-      gallery: [
-        'assets/images/mercedes-cclass-1.png',
-        'assets/images/mercedes-cclass-2.jpg',
-        'assets/images/mercedes-cclass-3.jpg',
-      ],
-      mileage: 22000,
-      fuelType: 'Petrol',
-      transmission: '9-Speed Automatic',
-      engine: '2.0L Turbocharged 4-cylinder',
-      description:
-        'The Mercedes-Benz C-Class exemplifies sophisticated luxury with its elegant design, advanced safety systems, and refined driving dynamics. This executive sedan offers premium comfort and state-of-the-art features for discerning drivers.',
-      features: [
-        'MB-Tex Leather Upholstery',
-        'MBUX Infotainment with Navigation',
-        'Active Parking Assist',
-        'Power Panoramic Sunroof',
-        'Multibeam LED Headlights',
-        'Dual-Zone Climate Control',
-        'Ambient Interior Lighting',
-        'Attention Assist Safety System',
-        'Wireless Apple CarPlay/Android Auto',
-        'Power Rear Sunshade',
-      ],
-      bodyType: 'Sedan',
-      doors: 4,
-      seats: 5,
-      drivetrain: 'RWD',
-      colorOptions: ['Iridium Silver', 'Obsidian Black', 'Polar White'],
-      fuelConsumption: 7.5,
-      co2Emission: 180,
-      warranty: '3 years / 60,000 km factory warranty with 24/7 support',
-    },
-    {
-      id: 5,
-      brand: 'Mazda',
-      model: 'CX-5',
-      year: 2012,
-      color: 'Blue',
-      price: 30000,
-      imageUrl: '',
-      gallery: ['assets/images/mazda-cx5-1.jpg', 'assets/images/mazda-cx5-2.jpg'],
-      mileage: 90000,
-      fuelType: 'Petrol',
-      transmission: '6-Speed Manual',
-      engine: '2.5L SKYACTIV-G 4-cylinder',
-      description:
-        'The Mazda CX-5 combines sporty handling with practical SUV versatility, offering reliable performance and spacious comfort. This well-maintained compact SUV delivers excellent value with its efficient engineering and durable construction.',
-      features: [
-        'Advanced Front Airbag System',
-        'Bluetooth Hands-Free Calling',
-        'Anti-lock Braking System (ABS)',
-        'Roof Rails for Cargo',
-        '17-inch Alloy Wheels',
-        'Tilt & Telescopic Steering',
-        'Power Windows & Locks',
-        'Rearview Camera',
-        'Cruise Control',
-        'Automatic Headlights',
-      ],
-      bodyType: 'SUV',
-      doors: 5,
-      seats: 5,
-      drivetrain: 'FWD',
-      colorOptions: ['Sky Blue Mica', 'Crystal White Pearl', 'Meteor Gray Mica'],
-      fuelConsumption: 9.0,
-      co2Emission: 220,
-      warranty: 'No warranty - sold as-is with recent maintenance completed',
-    },
-  ];
+  private carsSubject = new BehaviorSubject<Car[]>([]);
+  private allCars: Car[] = [];
+  private cars$: Observable<Car[]>;
 
-  private carsSubject = new BehaviorSubject<Car[]>(this.cars);
+  constructor(private http: HttpClient) {
+    this.cars$ = this.http.get<Car[]>('/cars').pipe(
+      tap((cars) => {
+        this.allCars = cars;
+        this.carsSubject.next(cars);
+      }),
+      shareReplay(1),
+      catchError(this.handleError)
+    );
+
+    this.cars$.subscribe();
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    let errorMessage = 'An unknown error occurred!';
+
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+
+      switch (error.status) {
+        case 0:
+          errorMessage = 'Unable to connect to server. Please check if json-server is running.';
+          break;
+        case 404:
+          errorMessage = 'Requested resource not found.';
+          break;
+        case 500:
+          errorMessage = 'Internal server error. Please try again later.';
+          break;
+      }
+    }
+
+    console.error('HTTP Error:', errorMessage);
+    return throwError(() => new Error(errorMessage));
+  }
 
   getItems(): Observable<Car[]> {
-    return of(this.cars);
+    return this.cars$;
   }
 
   getItemsStream(): Observable<Car[]> {
     return this.carsSubject.asObservable();
   }
 
-  getCarById(id: number): Observable<Car | undefined> {
-    const car = this.cars.find((c) => c.id === id);
-    return of(car);
+  getCarById(id: number): Observable<Car> {
+    return this.http.get<Car>(`/cars/${id}`).pipe(catchError(this.handleError));
   }
 
-  addCar(car: Car): Observable<Car> {
-    const newId = Math.max(...this.cars.map((c) => c.id)) + 1;
-    const newCar = { ...car, id: newId };
-    this.cars.push(newCar);
-    this.carsSubject.next([...this.cars]);
-    return of(newCar);
+  addCar(car: Omit<Car, 'id'>): Observable<Car> {
+    return this.http.post<Car>('/cars', car).pipe(
+      tap((newCar) => {
+        this.allCars = [...this.allCars, newCar];
+        this.carsSubject.next(this.allCars);
+      }),
+      catchError(this.handleError)
+    );
   }
 
   updateCar(updatedCar: Car): Observable<Car> {
-    const index = this.cars.findIndex((c) => c.id === updatedCar.id);
-    if (index !== -1) {
-      this.cars[index] = updatedCar;
-      this.carsSubject.next([...this.cars]);
-      return of(updatedCar);
-    }
-    throw new Error('Car not found');
+    return this.http.put<Car>(`/cars/${updatedCar.id}`, updatedCar).pipe(
+      tap((updated) => {
+        const index = this.allCars.findIndex((c) => c.id === updated.id);
+        if (index !== -1) {
+          this.allCars[index] = updated;
+          this.carsSubject.next([...this.allCars]);
+        }
+      }),
+      catchError(this.handleError)
+    );
   }
 
-  filterItems(query: string) {
+  deleteCar(id: number): Observable<void> {
+    return this.http.delete<void>(`/cars/${id}`).pipe(
+      tap(() => {
+        this.allCars = this.allCars.filter((c) => c.id !== id);
+        this.carsSubject.next(this.allCars);
+      }),
+      catchError(this.handleError)
+    );
+  }
+
+  filterItems(query: string): void {
     if (!query) {
-      this.carsSubject.next(this.cars);
+      this.carsSubject.next(this.allCars);
       return;
     }
+
     const q = query.toLowerCase();
-    const filtered = this.cars.filter(
+    const filtered = this.allCars.filter(
       (c) => c.brand.toLowerCase().includes(q) || c.model.toLowerCase().includes(q)
     );
     this.carsSubject.next(filtered);

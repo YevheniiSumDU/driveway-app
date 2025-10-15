@@ -20,7 +20,9 @@
             <label for="brand" class="form-label">Brand *</label>
             <select id="brand" formControlName="brand" class="form-select" [class.invalid]="isFieldInvalid('brand')">
               <option value="">Select Brand</option>
-              <option *ngFor="let brand of brands" [value]="brand">{{ brand }}</option>
+              @for (brand of brands; track brand) {
+              <option [value]="brand">{{ brand }}</option>
+              }
             </select>
             @if (isFieldInvalid('brand')) {
             <span class="error-message">{{ getFieldError('brand') }}</span>
@@ -52,7 +54,9 @@
             <label for="color" class="form-label">Color *</label>
             <select id="color" formControlName="color" class="form-select" [class.invalid]="isFieldInvalid('color')">
               <option value="">Select Color</option>
-              <option *ngFor="let color of colors" [value]="color">{{ color }}</option>
+              @for (color of colors; track color) {
+              <option [value]="color">{{ color }}</option>
+              }
             </select>
             @if (isFieldInvalid('color')) {
             <span class="error-message">{{ getFieldError('color') }}</span>
@@ -89,7 +93,9 @@
             <label for="fuelType" class="form-label">Fuel Type</label>
             <select id="fuelType" formControlName="fuelType" class="form-select">
               <option value="">Select Fuel Type</option>
-              <option *ngFor="let type of fuelTypes" [value]="type">{{ type }}</option>
+              @for (type of fuelTypes; track type) {
+              <option [value]="type">{{ type }}</option>
+              }
             </select>
           </div>
 
@@ -98,7 +104,9 @@
             <label for="transmission" class="form-label">Transmission</label>
             <select id="transmission" formControlName="transmission" class="form-select">
               <option value="">Select Transmission</option>
-              <option *ngFor="let trans of transmissions" [value]="trans">{{ trans }}</option>
+              @for (trans of transmissions; track trans) {
+              <option [value]="trans">{{ trans }}</option>
+              }
             </select>
           </div>
 
@@ -107,7 +115,9 @@
             <label for="bodyType" class="form-label">Body Type</label>
             <select id="bodyType" formControlName="bodyType" class="form-select">
               <option value="">Select Body Type</option>
-              <option *ngFor="let body of bodyTypes" [value]="body">{{ body }}</option>
+              @for (body of bodyTypes; track body) {
+              <option [value]="body">{{ body }}</option>
+              }
             </select>
           </div>
 
@@ -116,7 +126,9 @@
             <label for="drivetrain" class="form-label">Drivetrain</label>
             <select id="drivetrain" formControlName="drivetrain" class="form-select">
               <option value="">Select Drivetrain</option>
-              <option *ngFor="let drive of drivetrains" [value]="drive">{{ drive }}</option>
+              @for (drive of drivetrains; track drive) {
+              <option [value]="drive">{{ drive }}</option>
+              }
             </select>
           </div>
 
