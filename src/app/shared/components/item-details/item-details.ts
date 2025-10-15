@@ -1,22 +1,27 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { CarPropertyPipe } from '../../pipes/car-property.pipe';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Car } from '../../models/car.model';
 import { DataService } from '../../services/data.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-item-details',
-  standalone: true,
   imports: [CommonModule, RouterModule, CarPropertyPipe],
   templateUrl: './item-details.html',
   styleUrl: './item-details.scss',
 })
-export class ItemDetailsComponent implements OnInit {
+export class ItemDetails implements OnInit {
   car?: Car;
   currentImageIndex: number = 0;
   currentImage: string = '';
+  isLoading = true;
+  error: string | null = null;
+  isLoggedIn$: Observable<boolean>;
+  isDeleting = false;
 
   thumbnailStartIndex: number = 0;
   maxVisibleThumbnails: number = 5;
@@ -24,19 +29,53 @@ export class ItemDetailsComponent implements OnInit {
   showThumbnailNavLeft: boolean = false;
   showThumbnailNavRight: boolean = false;
 
-  constructor(
-    private route: ActivatedRoute,
-    private dataService: DataService,
-    private router: Router
-  ) {}
+  private authService = inject(AuthService);
+  private dataService = inject(DataService);
+
+  constructor(private route: ActivatedRoute, private router: Router) {
+    this.isLoggedIn$ = this.authService.isAuthenticated$;
+  }
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.dataService.getCarById(id).subscribe((car) => {
-      this.car = car;
-      this.initializeCarousel();
+    this.dataService.getCarById(id).subscribe({
+      next: (car) => {
+        this.car = car;
+        this.initializeCarousel();
+        this.isLoading = false;
+      },
+      error: (error) => {
+        this.error = error.message;
+        this.isLoading = false;
+      },
     });
+  }
+
+  deleteCar(): void {
+    if (
+      !this.car ||
+      !confirm('Are you sure you want to delete this car? This action cannot be undone.')
+    ) {
+      return;
+    }
+
+    this.isDeleting = true;
+    this.dataService.deleteCar(this.car.id).subscribe({
+      next: () => {
+        this.router.navigate(['/cars']);
+      },
+      error: (error) => {
+        this.error = error.message;
+        this.isDeleting = false;
+      },
+    });
+  }
+
+  editCar(): void {
+    if (this.car) {
+      this.router.navigate(['/items', this.car.id, 'edit']);
+    }
   }
 
   initializeCarousel() {

@@ -4,7 +4,9 @@
       placeholder="Search by brand or model" class="search-input" />
   </div>
   <div class="btn-container">
+    @if (isLoggedIn$ | async) {
     <a routerLink="/items/new" class="btn-add-car">+ Add New Car</a>
+    }
   </div>
 </div>
 

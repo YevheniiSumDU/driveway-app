@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError, shareReplay } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
+import { ApiResponse } from './interfaces/api.interface';
 import { Car } from '../models/car.model';
 
 @Injectable({
@@ -13,7 +14,14 @@ export class DataService {
   private cars$: Observable<Car[]>;
 
   constructor(private http: HttpClient) {
-    this.cars$ = this.http.get<Car[]>('/cars').pipe(
+    this.cars$ = this.http.get<ApiResponse<Car[]>>('/cars').pipe(
+      map((response) => {
+        if (response.success && response.data) {
+          return response.data;
+        } else {
+          throw new Error(response.message || 'Failed to load cars');
+        }
+      }),
       tap((cars) => {
         this.allCars = cars;
         this.carsSubject.next(cars);
@@ -31,11 +39,21 @@ export class DataService {
     if (error.error instanceof ErrorEvent) {
       errorMessage = `Error: ${error.error.message}`;
     } else {
-      errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      if (error.error && typeof error.error === 'object' && 'message' in error.error) {
+        errorMessage = error.error.message;
+      } else {
+        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+      }
 
       switch (error.status) {
         case 0:
-          errorMessage = 'Unable to connect to server. Please check if json-server is running.';
+          errorMessage = 'Unable to connect to server. Please check if the server is running.';
+          break;
+        case 401:
+          errorMessage = 'Authentication required. Please log in.';
+          break;
+        case 403:
+          errorMessage = 'Access forbidden.';
           break;
         case 404:
           errorMessage = 'Requested resource not found.';
@@ -59,11 +77,27 @@ export class DataService {
   }
 
   getCarById(id: number): Observable<Car> {
-    return this.http.get<Car>(`/cars/${id}`).pipe(catchError(this.handleError));
+    return this.http.get<ApiResponse<Car>>(`/cars/${id}`).pipe(
+      map((response) => {
+        if (response.success && response.data) {
+          return response.data;
+        } else {
+          throw new Error(response.message || 'Car not found');
+        }
+      }),
+      catchError(this.handleError)
+    );
   }
 
   addCar(car: Omit<Car, 'id'>): Observable<Car> {
-    return this.http.post<Car>('/cars', car).pipe(
+    return this.http.post<ApiResponse<Car>>('/cars', car).pipe(
+      map((response) => {
+        if (response.success && response.data) {
+          return response.data;
+        } else {
+          throw new Error(response.message || 'Failed to create car');
+        }
+      }),
       tap((newCar) => {
         this.allCars = [...this.allCars, newCar];
         this.carsSubject.next(this.allCars);
@@ -73,7 +107,14 @@ export class DataService {
   }
 
   updateCar(updatedCar: Car): Observable<Car> {
-    return this.http.put<Car>(`/cars/${updatedCar.id}`, updatedCar).pipe(
+    return this.http.put<ApiResponse<Car>>(`/cars/${updatedCar.id}`, updatedCar).pipe(
+      map((response) => {
+        if (response.success && response.data) {
+          return response.data;
+        } else {
+          throw new Error(response.message || 'Failed to update car');
+        }
+      }),
       tap((updated) => {
         const index = this.allCars.findIndex((c) => c.id === updated.id);
         if (index !== -1) {
@@ -86,7 +127,14 @@ export class DataService {
   }
 
   deleteCar(id: number): Observable<void> {
-    return this.http.delete<void>(`/cars/${id}`).pipe(
+    return this.http.delete<ApiResponse<void>>(`/cars/${id}`).pipe(
+      map((response) => {
+        if (response.success) {
+          return;
+        } else {
+          throw new Error(response.message || 'Failed to delete car');
+        }
+      }),
       tap(() => {
         this.allCars = this.allCars.filter((c) => c.id !== id);
         this.carsSubject.next(this.allCars);
