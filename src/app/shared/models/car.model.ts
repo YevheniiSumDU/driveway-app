@@ -24,4 +24,6 @@ export interface Car {
   isNew?: boolean;
   horsepower?: number;
   acceleration?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
 }

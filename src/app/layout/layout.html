@@ -1,8 +1,28 @@
 <header class="header">
   <div class="container">
-    <a routerLink="/" class="logo-link">
-      <h1 class="logo">{{ appName }}</h1>
-    </a>
+    <div class="header-content">
+      <a routerLink="/" class="logo-link">
+        <h1 class="logo">{{ appName }}</h1>
+      </a>
+
+      <div class="header-actions">
+        @if (authService.isLoggedIn()) {
+        <div class="user-menu">
+          <span class="user-greeting">
+            Welcome, {{ authService.getCurrentUser()?.firstName }}!
+          </span>
+          <button (click)="logout()" class="logout-btn">
+            Logout
+          </button>
+        </div>
+        } @else {
+        <div class="auth-links">
+          <a routerLink="/login" class="auth-link">Login</a>
+          <a routerLink="/register" class="auth-link register-link">Sign Up</a>
+        </div>
+        }
+      </div>
+    </div>
   </div>
 </header>
 

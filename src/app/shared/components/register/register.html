@@ -1,0 +1,112 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Create Account</h1>
+      <p>Join DriveWay today</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input id="firstName" type="text" formControlName="firstName" placeholder="Enter your first name"
+            autocomplete="off" [class.error]="firstName?.invalid && firstName?.touched" />
+          @if (firstName?.invalid && firstName?.touched) {
+          <div class="error-message">
+            @if (firstName?.errors?.['required']) {
+            <span>First name is required</span>
+            }
+            @if (firstName?.errors?.['minlength']) {
+            <span>First name must be at least 2 characters</span>
+            }
+          </div>
+          }
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input id="lastName" type="text" formControlName="lastName" placeholder="Enter your last name"
+            autocomplete="off" [class.error]="lastName?.invalid && lastName?.touched" />
+          @if (lastName?.invalid && lastName?.touched) {
+          <div class="error-message">
+            @if (lastName?.errors?.['required']) {
+            <span>Last name is required</span>
+            }
+            @if (lastName?.errors?.['minlength']) {
+            <span>Last name must be at least 2 characters</span>
+            }
+          </div>
+          }
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input id="email" type="email" formControlName="email" placeholder="Enter your email" autocomplete="off"
+          [class.error]="email?.invalid && email?.touched" />
+        @if (email?.invalid && email?.touched) {
+        <div class="error-message">
+          @if (email?.errors?.['required']) {
+          <span>Email is required</span>
+          }
+          @if (email?.errors?.['email']) {
+          <span>Please enter a valid email</span>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" formControlName="password" placeholder="Enter your password"
+          autocomplete="off" [class.error]="password?.invalid && password?.touched" />
+        @if (password?.invalid && password?.touched) {
+        <div class="error-message">
+          @if (password?.errors?.['required']) {
+          <span>Password is required</span>
+          }
+          @if (password?.errors?.['minlength']) {
+          <span>Password must be at least 6 characters</span>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <input id="confirmPassword" type="password" formControlName="confirmPassword"
+          placeholder="Confirm your password" [class.error]="confirmPassword?.invalid && confirmPassword?.touched" />
+        @if (confirmPassword?.invalid && confirmPassword?.touched) {
+        <div class="error-message">
+          @if (confirmPassword?.errors?.['required']) {
+          <span>Please confirm your password</span>
+          }
+          @if (confirmPassword?.errors?.['passwordMismatch']) {
+          <span>Passwords do not match</span>
+          }
+        </div>
+        }
+      </div>
+
+      @if (errorMessage) {
+      <div class="alert alert-error">
+        {{ errorMessage }}
+      </div>
+      }
+
+      <button type="submit" class="btn-primary" [disabled]="registerForm.invalid || isLoading">
+        @if (isLoading) {
+        <span class="loading-spinner"></span>
+        }
+        {{ isLoading ? 'Creating Account...' : 'Create Account' }}
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>
+        Already have an account?
+        <a routerLink="/login" class="auth-link">Sign in here</a>
+      </p>
+    </div>
+  </div>
+</div>

@@ -78,6 +78,24 @@
         </button>
       </div>
 
+      <!-- Action Buttons for Authenticated Users -->
+      @if (isLoggedIn$ | async) {
+      <div class="action-buttons">
+        <button class="btn-edit" (click)="editCar()" [disabled]="isDeleting">
+          <span class="btn-icon">✏️</span>
+          Edit Car
+        </button>
+        <button class="btn-delete" (click)="deleteCar()" [disabled]="isDeleting">
+          @if (isDeleting) {
+          <span class="loading-spinner"></span>
+          } @else {
+          <span class="btn-icon">🗑️</span>
+          }
+          {{ isDeleting ? 'Deleting...' : 'Delete Car' }}
+        </button>
+      </div>
+      }
+
       <!-- Key Specifications -->
       <div class="key-specs">
         <div class="spec-item">

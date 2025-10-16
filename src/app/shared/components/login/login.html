@@ -1,0 +1,62 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Welcome Back</h1>
+      <p>Sign in to your DriveWay account</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input id="email" type="email" formControlName="email" placeholder="Enter your email" autocomplete="off"
+          [class.error]="email?.invalid && email?.touched" />
+        @if (email?.invalid && email?.touched) {
+        <div class="error-message">
+          @if (email?.errors?.['required']) {
+          <span>Email is required</span>
+          }
+          @if (email?.errors?.['email']) {
+          <span>Please enter a valid email</span>
+          }
+        </div>
+        }
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" formControlName="password" placeholder="Enter your password"
+          autocomplete="off" [class.error]="password?.invalid && password?.touched" />
+        @if (password?.invalid && password?.touched) {
+        <div class="error-message">
+          @if (password?.errors?.['required']) {
+          <span>Password is required</span>
+          }
+          @if (password?.errors?.['minlength']) {
+          <span>Password must be at least 6 characters</span>
+          }
+        </div>
+        }
+      </div>
+
+      @if (errorMessage) {
+      <div class="alert alert-error">
+        {{ errorMessage }}
+      </div>
+      }
+
+      <button type="submit" class="btn-primary" [disabled]="loginForm.invalid || isLoading">
+        @if (isLoading) {
+        <span class="loading-spinner"></span>
+        }
+        {{ isLoading ? 'Signing In...' : 'Sign In' }}
+      </button>
+    </form>
+
+    <div class="auth-footer">
+      <p>
+        Don't have an account?
+        <a routerLink="/register" class="auth-link">Sign up here</a>
+      </p>
+    </div>
+  </div>
+</div>

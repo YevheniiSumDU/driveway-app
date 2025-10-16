@@ -5,6 +5,7 @@ import { RouterModule } from '@angular/router';
 import { ItemCard } from '../item-card/item-card';
 import { Car } from '../../models/car.model';
 import { DataService } from '../../services/data.service';
+import { AuthService } from '../../services/auth.service';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -18,9 +19,11 @@ export class ItemsList implements OnInit {
   cars$: Observable<Car[]>;
   isLoading = true;
   error: string | null = null;
+  isLoggedIn$: Observable<boolean>;
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService, private authService: AuthService) {
     this.cars$ = this.dataService.getItemsStream();
+    this.isLoggedIn$ = this.authService.isAuthenticated$;
   }
 
   ngOnInit() {
