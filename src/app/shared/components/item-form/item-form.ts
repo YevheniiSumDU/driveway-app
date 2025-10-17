@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Car } from '../../models/car.model';
-import { DataService } from '../../services/data.service';
+import { DataService } from '../../services/data/data.service';
 
 @Component({
   selector: 'app-item-form',

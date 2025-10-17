@@ -4,7 +4,7 @@ import { ItemDetails } from './shared/components/item-details/item-details';
 import { ItemForm } from './shared/components/item-form/item-form';
 import { Login } from './shared/components/login/login';
 import { Register } from './shared/components/register/register';
-import { AuthGuard } from './shared/guards/auth.guard';
+import { AuthGuard } from './shared/guards/auth/auth.guard';
 
 export const routes: Routes = [
   { path: 'items', component: ItemsList },
