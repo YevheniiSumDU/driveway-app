@@ -1,8 +1,14 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import {
+  ReactiveFormsModule,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+  ValidationErrors,
+} from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -47,14 +53,16 @@ export class Register {
     return this.registerForm.get('confirmPassword');
   }
 
-  private passwordMatchValidator(form: any) {
-    const password = form.get('password');
-    const confirmPassword = form.get('confirmPassword');
+  private passwordMatchValidator(control: AbstractControl): ValidationErrors | null {
+    const password = control.get('password');
+    const confirmPassword = control.get('confirmPassword');
 
-    if (password?.value !== confirmPassword?.value) {
-      confirmPassword?.setErrors({ passwordMismatch: true });
+    if (password && confirmPassword && password.value !== confirmPassword.value) {
+      confirmPassword.setErrors({ passwordMismatch: true });
+      return { passwordMismatch: true };
     } else {
       confirmPassword?.setErrors(null);
+      return null;
     }
   }
 

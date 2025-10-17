@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { BehaviorSubject, Observable, throwError, shareReplay } from 'rxjs';
 import { catchError, tap, map } from 'rxjs/operators';
-import { ApiResponse } from './interfaces/api.interface';
-import { Car } from '../models/car.model';
+import { ApiResponse } from '../interfaces/api.interface';
+import { Car } from '../../models/car.model';
 
 @Injectable({
   providedIn: 'root',
@@ -37,14 +37,24 @@ export class DataService {
     let errorMessage = 'An unknown error occurred!';
 
     if (error.error instanceof ErrorEvent) {
+      // Client-side error
       errorMessage = `Error: ${error.error.message}`;
     } else {
-      if (error.error && typeof error.error === 'object' && 'message' in error.error) {
-        errorMessage = error.error.message;
+      // Server-side error
+      if (
+        error.error &&
+        typeof error.error === 'object' &&
+        'message' in error.error &&
+        error.status
+      ) {
+        // Format the error message with status code and message
+        errorMessage = `Error Code: ${error.status}\nMessage: ${error.error.message}`;
       } else {
-        errorMessage = `Error Code: ${error.status}\nMessage: ${error.message}`;
+        // For non-API errors, use the HTTP status and message
+        errorMessage = `${error.message}`;
       }
 
+      // Handle specific HTTP status codes with custom messages
       switch (error.status) {
         case 0:
           errorMessage = 'Unable to connect to server. Please check if the server is running.';
