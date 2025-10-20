@@ -56,10 +56,13 @@ export class CarPropertyPipe implements PipeTransform {
   }
 
   private formatPrice(price: number): string {
-    if (price >= 1000000) {
-      return `$${(price / 1000000).toFixed(1)}M`;
-    } else if (price >= 1000) {
-      return `$${(price / 1000).toFixed(0)}K`;
+    if (price >= 1_000_000) {
+      return `$${(price / 1_000_000).toLocaleString(undefined, {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      })}M`;
+    } else if (price >= 10_000) {
+      return `$${(price / 1_000).toFixed(0)}K`;
     }
     return `$${price.toLocaleString()}`;
   }
@@ -110,15 +113,9 @@ export class CarPropertyPipe implements PipeTransform {
     const currentYear = new Date().getFullYear();
     const age = currentYear - year;
 
-    if (age === 0) {
-      return 'Brand New';
-    } else if (age === 1) {
-      return '1 year old';
-    } else if (age <= 5) {
-      return `${age} years old`;
-    } else {
-      return `${age} years old`;
-    }
+    if (age === 0) return 'Brand New';
+    if (age === 1) return '1 year old';
+    return `${age} years old`;
   }
 
   private formatShortText(text: string, maxLength: number = 30): string {

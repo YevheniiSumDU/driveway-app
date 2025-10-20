@@ -5,8 +5,8 @@ import { CarPropertyPipe } from '../../pipes/car-property.pipe';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Car } from '../../models/car.model';
-import { DataService } from '../../services/data.service';
-import { AuthService } from '../../services/auth.service';
+import { DataService } from '../../services/data/data.service';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
   selector: 'app-item-details',
@@ -32,7 +32,7 @@ export class ItemDetails implements OnInit {
   private authService = inject(AuthService);
   private dataService = inject(DataService);
 
-  constructor(private route: ActivatedRoute, private router: Router) {
+  constructor(private route: ActivatedRoute, protected router: Router) {
     this.isLoggedIn$ = this.authService.isAuthenticated$;
   }
 

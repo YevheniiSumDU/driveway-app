@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { ItemCard } from '../item-card/item-card';
 import { Car } from '../../models/car.model';
-import { DataService } from '../../services/data.service';
-import { AuthService } from '../../services/auth.service';
+import { DataService } from '../../services/data/data.service';
+import { AuthService } from '../../services/auth/auth.service';
 import { Observable } from 'rxjs';
 
 @Component({
