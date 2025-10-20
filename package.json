@@ -1,6 +1,8 @@
 {
   "name": "driveway-app",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Driveway App — an Angular web application for managing and exploring cars, including listings, details, and user interactions.",
+  "license": "MIT",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",

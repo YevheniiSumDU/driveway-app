@@ -126,7 +126,7 @@
 
       <!-- Detailed Specifications -->
       <div class="specs-grid">
-        <h3>Technical Specifications</h3>
+        <h3 class="section-title">Technical Specifications</h3>
         <div class="specs-container">
           @if (car.engine || car.transmission || car.drivetrain) {
           <div class="spec-group">
@@ -199,7 +199,7 @@
       <!-- Features & Equipment -->
       @if (car.features && car.features.length > 0) {
       <div class="features-section">
-        <h3>Features & Equipment</h3>
+        <h3 class="section-title">Features & Equipment</h3>
         <div class="features-grid">
           @for (feature of car.features; track feature) {
           <div class="feature-item">
@@ -214,7 +214,7 @@
       <!-- Color Options -->
       @if (car.colorOptions && car.colorOptions.length > 0) {
       <div class="color-options-section">
-        <h3>Available Colors</h3>
+        <h3 class="section-title">Available Colors</h3>
         <div class="colors-grid">
           @for (color of car.colorOptions; track color) {
           <div class="color-item">
@@ -229,7 +229,7 @@
       <!-- Description -->
       @if (car.description) {
       <div class="description-section">
-        <h3>Description</h3>
+        <h3 class="section-title">Description</h3>
         <p class="description-text">{{ car.description }}</p>
       </div>
       }
@@ -237,7 +237,7 @@
       <!-- Warranty Information -->
       @if (car.warranty) {
       <div class="warranty-section">
-        <h3>Warranty & Support</h3>
+        <h3 class="section-title">Warranty & Support</h3>
         <div class="warranty-card">
           <span class="warranty-icon">🛡️</span>
           <div class="warranty-details">
